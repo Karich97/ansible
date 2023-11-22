@@ -1,0 +1,29 @@
+- name: Deploy container
+  hosts: localhost
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Docker Python library
+      pip:
+        name: docker
+        state: present
+
+    - name: Install Docker Compose Python library
+      pip:
+        name: docker-compose
+        state: present
+
+    - name: Start Docker Compose project
+      docker_compose:
+        project_src: ./
+        project_name: nginx
+        state: present
+        build: yes
+        recreate: always
+        remove_orphans: yes
